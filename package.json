@@ -1,6 +1,6 @@
 {
   "name": "simplebox",
-  "version": "0.0.1",
+  "version": "0.1.0",
   "description": "simple box to preview image",
   "main": "./src/simplebox.js",
   "scripts": {

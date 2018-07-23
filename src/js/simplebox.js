@@ -21,7 +21,8 @@
   var defaults = {
     modalClass: '',
     fadeDuration: 200,
-    slideShow: false
+    slideShow: false,
+    loading: true
   }
 
   /**
@@ -29,27 +30,51 @@
    * @param {object} options 
    */
   function initialize(options) {
-    var $modal = $('<div class="simplebox-modal ' + options.modalClass + '" style="display: none;"></div>');
-    var $modalContent = $('<div class="simplebox-content"></div>');
-    var $modalTaget = $('<img class="simplebox-img" src="" alt="">');
-    $modalTaget.appendTo($modalContent);
-    $modalContent.appendTo($modal);
-    $modal.appendTo('body');
+    var simpleboxRef = {
+      $modal: $('<div class="simplebox-modal ' + options.modalClass + '" style="display: none;"></div>'),
+      $modalContent: $('<div class="simplebox-content"></div>'),
+      $modalTarget: $('<img class="simplebox-img" src="" alt="" style="display: none;">'),
+      $loader: $('<div class="simplebox-loader" style="display: none;"></div>')
+    };
+    simpleboxRef.$modalTarget.appendTo(simpleboxRef.$modalContent);
+    simpleboxRef.$loader.appendTo(simpleboxRef.$modal);
+    simpleboxRef.$modalContent.appendTo(simpleboxRef.$modal);
+    simpleboxRef.$modal.appendTo('body');
     
-    $modal.click(function(e) {
-      $modal.fadeOut(options.fadeDuration);
+    simpleboxRef.$modal.click(function(e) {
+      simpleboxRef.$modal.fadeOut(options.fadeDuration);
+      simpleboxRef.$modalTarget.attr('src', '');
     });
     
-    $modalContent.click(function(e) {
+    simpleboxRef.$modalContent.click(function(e) {
       e.stopPropagation();
     });
+
+    if (options.loading) {
+      simpleboxRef.$modalTarget.on('load', function() {
+        simpleboxRef.$loader.fadeOut({
+          duration: 100,
+          complete: function() {
+            simpleboxRef.$modalTarget.fadeIn({
+              duration: 200,
+              complete: function() {
+                simpleboxRef.$modalTarget.removeAttr('style');
+              } 
+            })
+          }
+        });
+      })
+    }
+
     $.simplebox = {};
-    $.simplebox.$modal = $modal;
-    $.simplebox.$modalTaget = $modalTaget;
-  }
+    $.simplebox.defaults = defaults;
+    $.simplebox.$modal = simpleboxRef.$modal;
+    $.simplebox.$modalTarget = simpleboxRef.$modalTarget;
+    $.simplebox.$loader = simpleboxRef.$loader;
+  };
 
   /**
-   * open simplebox modal
+   * open the modal
    * @param {Event} e 
    * @param {Object} options 
    */
@@ -60,19 +85,25 @@
      */
     if (e && e.isDefaultPrevented()) {
       return;
-    }
+    };
     e.preventDefault();
 
     var $target = $(e.currentTarget);
-    $.simplebox.$modalTaget.attr('src', $target.attr('src') || $target.attr('href'));
     $.simplebox.$modal.fadeIn({
       duration: options.fadeDuration,
       complete: function() {
-        $.simplebox.$modal.removeAttr('style');
+        $.simplebox.$modalTarget.removeAttr('style');
         options.complete && options.complete();
       } 
     });
-  }
+    $.simplebox.$modalTarget.attr('src', $target.attr('src') || $target.attr('href'));
+    if (options.loading) {
+      $.simplebox.$loader.removeAttr('style');
+    } else {
+      $.simplebox.$modalTarget.removeAttr('style');
+    }
+    
+  };
   
   $.fn.simplebox = function(options) {
     var settings = $.extend(defaults, options);
@@ -83,7 +114,7 @@
     return this.click(function(e) {
       open(e, settings);
     });
-  }
+  };
   
   $(document).on('click', '[data-simplebox]', function(e) {
     open(e, defaults);
@@ -95,6 +126,6 @@
         initialize(defaults);
       }
     }
-  })
+  });
   
 }(jQuery));

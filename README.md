@@ -41,17 +41,21 @@ $('.js-simplebox').simplebox({
 After initialize simplebox you can access its modal references by using `$.simplebox`
 
 ```js
-var $box = $.simplebox.$modal           // JQuery object of the modal
-var $target = $.simplebox.$modalTarget  // JQuery object of the image inside modal
+$.simplebox.$modal        // JQuery object of the modal
+$.simplebox.$modalTarget  // JQuery object of the image inside modal
+$.simplebox.$loader       // JQuery object of the loader
+$.simplebox.defaults      // Defaults options
 ```
 # Options
 
 These are the supported options and their default values:
 
 ```js
-$.modal.defaults = {
-  fadeDuration: 200   // Duration of the fading animation of the modal
-  modalClass: ''      // Additional class that you want for the modal
+$.simplebox.defaults = {
+  fadeDuration: 200,        // {number} Duration of the fading animation of the modal
+  modalClass: '',           // {string} Additional class that you want for the modal
+  complete: function() {},  // {function} A function that run when the animation of the open complete
+  loading: true             // {boolean} Show A loader that appears after modal showed up and before image loaded
 };
 ```
 I'm sorry there are not many. 
