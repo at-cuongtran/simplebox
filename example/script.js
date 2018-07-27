@@ -1,6 +1,7 @@
 $(function() {
   var $simplebox = $('.js-thumb').simplebox({
-    loading: true
+    loading: true,
+    infinityLoop: true
   });
-  console.log($.simplebox.$modal);
+  // console.log($.simplebox.$modal);
 })

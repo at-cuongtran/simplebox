@@ -14,11 +14,7 @@
   display: flex;
   justify-content: center;
   align-items: center;
-  /* background: #FFFFFF; */
-  /* padding: 16px; */
-  /* -webkit-box-shadow: 0px 3px 18px 0px rgba(204,204,204,1);
-  -moz-box-shadow: 0px 3px 18px 0px rgba(204,204,204,1);
-  box-shadow: 0px 3px 18px 0px rgba(204,204,204,1); */
+  z-index: 1;
 } 
 
 .simplebox-img {
@@ -28,12 +24,41 @@
 
 .simplebox-icon {
   display: inline-block;
+  margin: 0 0.2em;
   width: 1em;
   height: 1em;
   stroke-width: 0;
-  color: #000000;
+  font-size: 3em;
+  color: #858585;
   stroke: currentColor;
   fill: currentColor;
+  transition: all 0.1s cubic-bezier(0.07, 0.54, 0.6, 1.01);
+}
+
+.simplebox-nav-btn {
+  display: inline-flex;
+  position: absolute;
+  cursor: pointer;
+}
+
+.simplebox-next {
+  right: 0;
+}
+
+.simplebox-back {
+  left: 0;
+}
+
+.simplebox-nav-btn.simplebox-disable {
+  cursor: default;
+}
+
+.simplebox-nav-btn.simplebox-disable:hover .simplebox-icon {
+  color: #858585;
+}
+
+.simplebox-nav-btn:hover .simplebox-icon {
+  color: #E0E0E0;
 }
 
 /**
@@ -45,6 +70,7 @@
   width: 10em;
   height: 10em;
 }
+
 .simplebox-loader {
   font-size: 6px;
   position: absolute;
@@ -57,6 +83,7 @@
   transform: translateZ(0);
   -webkit-animation: simplebox-load 1.1s infinite linear;
   animation: simplebox-load 1.1s infinite linear;
+  z-index: 0;
 }
 @-webkit-keyframes simplebox-load {
   0% {
